@@ -20,4 +20,9 @@
 ## CondeNet, Inc. All Rights Reserved.
 ################################################################################
 
-<p class="error">${thing.message}</p>
+<p class="error">
+  ${thing.message}
+  %if thing.explanation:
+    &mdash; ${thing.explanation}
+  %endif
+</p>

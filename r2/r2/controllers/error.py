@@ -112,7 +112,8 @@ class ErrorController(RedditController):
         c.response.status_code = 403
         c.site = DefaultSR()
         res = pages.RedditError(_("forbidden (%(domain)s)") %
-                                dict(domain=g.domain))
+                                dict(domain=g.domain),
+                                explanation=request.GET.get('explanation'))
         return res.render()
 
     def send404(self):

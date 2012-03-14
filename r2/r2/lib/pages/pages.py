@@ -1299,12 +1299,12 @@ class ClientInfoBar(InfoBar):
 
 class RedditError(BoringPage):
     site_tracking = False
-    def __init__(self, title, message = None):
+    def __init__(self, title, message=None, explanation=None):
         if not message:
             message = title
         BoringPage.__init__(self, title, loginbox=False,
                             show_sidebar = False, 
-                            content=ErrorPage(message))
+                            content=ErrorPage(message, explanation))
 
 class Reddit404(BoringPage):
     site_tracking = False
@@ -1321,8 +1321,10 @@ class UnfoundPage(Templated):
     
 class ErrorPage(Templated):
     """Wrapper for an error message"""
-    def __init__(self, message = _("you aren't allowed to do that.")):
-        Templated.__init__(self, message = message)
+    def __init__(self, message = _("you aren't allowed to do that."), explanation=None):
+        # Normalize explanation strings.
+        explanation = explanation.lower().rstrip('.') + '.'
+        Templated.__init__(self, message=message, explanation=explanation)
     
 class Profiling(Templated):
     """Debugging template for code profiling using built in python
