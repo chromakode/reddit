@@ -1017,6 +1017,13 @@ class VExistingUname(VOptionalExistingUname):
             self.error()
         return user
 
+class VExistingUnameNotSelf(VExistingUname):
+    def run(self, name):
+        user = super(VExistingUnameNotSelf, self).run(name)
+        if not user or user == c.user:
+            self.error()
+        return user
+
 class VMessageRecipient(VExistingUname):
     def run(self, name):
         if not name:
@@ -1620,3 +1627,26 @@ class VFlairTemplateByID(VRequired):
                 c.site._id, flair_template_id)
         except tdb_cassandra.NotFound:
             return None
+
+class VOAuth2ClientID(VRequired):
+    default_param = "client_id"
+    def __init__(self, param=None, developer=False, *a, **kw):
+        self.developer = developer
+        VRequired.__init__(self, param, errors.OAUTH2_INVALID_CLIENT, *a, **kw)
+
+    def run(self, client_id):
+        if not client_id:
+            return self.error()
+
+        client = OAuth2Client.get_token(client_id)
+        if client and not client.deleted:
+            return client
+        else:
+            return self.error()
+
+class VOAuth2ClientDeveloper(VOAuth2ClientID):
+    def run(self, client_id):
+        client = super(VOAuth2ClientDeveloper)
+        if not client or not client.has_developer(c.user):
+            return self.error()
+        return client
