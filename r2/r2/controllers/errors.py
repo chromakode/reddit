@@ -91,6 +91,7 @@ error_list = dict((
         ('BAD_CSS_NAME', _('invalid css name')),
         ('TOO_MUCH_FLAIR_CSS', _('too many flair css classes')),
         ('OAUTH2_INVALID_CLIENT', _('invalid client id')),
+        ('OAUTH2_INVALID_REDIRECT_URI', _('invalid redirect_uri parameter')),
         ('OAUTH2_ACCESS_DENIED', _('access denied by the user')),
         ('CONFIRM', _("please confirm the form")),
         ('NO_API', _('cannot perform this action via the API')),
