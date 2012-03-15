@@ -2622,5 +2622,6 @@ class ApihelpController(RedditController):
                 api_methods=api_methods,
                 oauth2_scopes=scope_info,
             ),
-            css_class="api-help"
+            css_class="api-help",
+            show_sidebar=False
         ).render()

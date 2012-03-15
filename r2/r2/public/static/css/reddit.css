@@ -5141,6 +5141,31 @@ tr.gold-accent + tr > td {
     display: inline-block;
 }
 
+.api-help {
+    font-size: 1.15em;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.api-help .section {
+    padding: 10px 30px;
+}
+
+.api-help h1 {
+    font-size: 1.60em;
+}
+
+.api-help .contents {
+    background: #eff7ff;
+    border: 2px solid #cee3f8;
+    border-left: none;
+    border-right: none;
+}
+
+.api-help .contents h1 {
+    margin-top: .5em;
+}
+
 .api-help .contents strong {
     font-size: 1.25em;
     font-weight: bold;
@@ -5152,14 +5177,11 @@ tr.gold-accent + tr > td {
 
 .api-help .contents > ul > li {
     margin-bottom: 1em;
-    margin-right: 4em;
-    display: inline-block;
-    width: auto;
-    vertical-align: top;
 }
 
 .api-help .contents li li {
-    margin-bottom: 0;
+    display: inline-block;
+    width: 20em;
 }
 
 .api-help .endpoint, .api-help .oauth2-scope {
@@ -5171,13 +5193,13 @@ tr.gold-accent + tr > td {
 }
 
 .api-help .method, .api-help .oauth2-scope p {
-    border-left: 2px solid #aaa;
+    border-left: 2px solid #ccc;
     padding-left: 1em;
+    margin-bottom: 1em;
 }
 
 .api-help .method h3 {
     color: #555;
-    margin-bottom: 0;
 }
 
 .api-help .method .md p {
