@@ -206,13 +206,13 @@ class OAuth2AuthorizationCode(OAuth2Token):
                      used=False,
                     )
     _bool_props = ("used",)
-    _int_props = ("user_id",)
     _warn_on_partial_ttl = False
     _use_db = True
     _connection_pool = 'main'
 
     @classmethod
-    def _new(cls, client_id, redirect_uri, user_id, scope):
+    def _new(cls, client_id, redirect_uri, user_id, scope_list):
+        scope = ','.join(scope_list)
         return super(OAuth2AuthorizationCode, cls)._new(
                 client_id=client_id,
                 redirect_uri=redirect_uri,
@@ -244,12 +244,12 @@ class OAuth2AccessToken(OAuth2Token):
     _defaults = dict(scope="",
                      token_type="bearer",
                     )
-    _int_props = ("user_id",)
     _use_db = True
     _connection_pool = 'main'
 
     @classmethod
-    def _new(cls, user_id, scope):
+    def _new(cls, user_id, scope_list):
+        scope = ','.join(scope_list)
         return super(OAuth2AccessToken, cls)._new(
                      user_id=user_id,
                      scope=scope)
@@ -322,6 +322,10 @@ class OAuth2AccessToken(OAuth2Token):
                 tokens.append(token)
 
         return tokens
+
+    @property
+    def scope_list(self):
+        return self.scope.split(',')
 
 class OAuth2AccessTokensByUser(tdb_cassandra.View):
     """Index listing the outstanding access tokens for an account."""
