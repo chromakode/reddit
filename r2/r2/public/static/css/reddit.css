@@ -5140,3 +5140,45 @@ tr.gold-accent + tr > td {
     margin-bottom: .5em;
     display: inline-block;
 }
+
+.api-help .contents strong {
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.api-help .contents a:hover {
+    text-decoration: underline;
+}
+
+.api-help .contents > ul > li {
+    margin-bottom: 1em;
+    margin-right: 4em;
+    display: inline-block;
+    width: auto;
+    vertical-align: top;
+}
+
+.api-help .contents li li {
+    margin-bottom: 0;
+}
+
+.api-help .endpoint {
+    margin-bottom: 1em;
+}
+
+.api-help .endpoint h2 {
+    margin-bottom: .5em;
+}
+
+.api-help .method {
+    margin-left: 1em;
+}
+
+.api-help .method h3 {
+    color: #555;
+    margin-bottom: 0;
+}
+
+.api-help .method .md p {
+    margin-top: 0;
+}
