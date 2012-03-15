@@ -248,9 +248,10 @@ class OAuth2AccessToken(OAuth2Token):
     _connection_pool = 'main'
 
     @classmethod
-    def _new(cls, user_id, scope_list):
+    def _new(cls, client_id, user_id, scope_list):
         scope = ','.join(scope_list)
         return super(OAuth2AccessToken, cls)._new(
+                     client_id=client_id,
                      user_id=user_id,
                      scope=scope)
 
