@@ -161,7 +161,7 @@ class OAuth2Client(OAuth2Token):
             try:
                 client = cls._byID(cid)
                 if getattr(client, 'deleted', False) or not client.has_developer(account):
-                    raise NotFound
+                    raise tdb_cassandra.NotFound
             except tdb_cassandra.NotFound:
                 pass
             else:
