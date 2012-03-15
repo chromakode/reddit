@@ -2621,5 +2621,6 @@ class ApihelpController(RedditController):
             content=ApiHelp(
                 api_methods=api_methods,
                 oauth2_scopes=scope_info,
-            )
+            ),
+            css_class="api-help"
         ).render()
