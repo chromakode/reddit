@@ -54,6 +54,7 @@ from r2.lib.subreddit_search import search_reddits
 from r2.lib.log import log_text
 from r2.lib.filters import safemarkdown
 from r2.lib.scraper import str_to_image
+from r2.controllers.oauth2 import OAuth2ResourceController, require_oauth2_scope
 
 import csv
 from collections import defaultdict
@@ -88,10 +89,18 @@ class ApiminimalController(MinimalController):
         form._send_data(iden = iden) 
 
 
-class ApiController(RedditController):
+class ApiController(RedditController, OAuth2ResourceController):
     """
     Controller which deals with almost all AJAX site interaction.  
     """
+
+    def pre(self):
+        RedditController.pre(self)
+        if self._get_bearer_token(strict=False):
+            OAuth2ResourceController.pre(self)
+            if c.oauth_user:
+                c.user = c.oauth_user
+                c.user_is_loggedin = True
 
     @validatedForm()
     def ajax_login_redirect(self, form, jquery, dest):
