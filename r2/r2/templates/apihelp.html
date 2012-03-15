@@ -52,25 +52,12 @@
 <div class="apihelp scopes">
 <h1>OAuth scopes</h1>
 
-<table class="oauth2-scopes">
-  <thead>
-    <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>description</th>
-    </tr>
-  </thead>
-  <tbody>
-    %for scope in sorted(thing.oauth2_scopes.keys()):
-      <tr>
-        <td class="oauth2-scope-id">
-          <a name="oauth2_scope_${scope}"></a>
-          ${scope}
-        </td>
-        <td class="oauth2-scope-name">${thing.oauth2_scopes[scope]['name']}</td>
-        <td class="oauth2-scope-description">${thing.oauth2_scopes[scope]['description']}</td>
-      </tr>
-    %endfor
-  </tbody>
-</table>
+<div class="oauth2-scopes">
+  %for scope in sorted(thing.oauth2_scopes.keys()):
+    <div class="oauth2-scope">
+      <h2>${scope} (${thing.oauth2_scopes[scope]['name']})</h2>
+      <p class="oauth2-scope-description">${thing.oauth2_scopes[scope]['description']}</p>
+    </div>
+  %endfor
+</div>
 </div>

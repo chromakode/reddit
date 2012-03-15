@@ -5162,16 +5162,17 @@ tr.gold-accent + tr > td {
     margin-bottom: 0;
 }
 
-.api-help .endpoint {
+.api-help .endpoint, .api-help .oauth2-scope {
     margin-bottom: 1em;
 }
 
-.api-help .endpoint h2 {
+.api-help .endpoint h2, .api-help .oauth2-scope h2 {
     margin-bottom: .5em;
 }
 
-.api-help .method {
-    margin-left: 1em;
+.api-help .method, .api-help .oauth2-scope p {
+    border-left: 2px solid #aaa;
+    padding-left: 1em;
 }
 
 .api-help .method h3 {
