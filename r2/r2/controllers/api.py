@@ -2591,11 +2591,8 @@ class ApihelpController(RedditController):
 
         api_methods = defaultdict(dict)
         for name, func in controller.__dict__.iteritems():
-            i = name.find('_')
-            if i > 0:
-                method = name[:i]
-                action = name[i+1:]
-            else:
+            method, sep, action = name.partition('_')
+            if not action:
                 continue
 
             if func.__doc__ and method in ('GET', 'POST'):
