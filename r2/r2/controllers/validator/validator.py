@@ -44,6 +44,7 @@ from datetime import datetime, timedelta
 from curses.ascii import isprint
 import re, inspect
 import pycountry
+from itertools import chain
 
 def visible_promo(article):
     is_promo = getattr(article, "promoted", None) is not None
@@ -85,6 +86,12 @@ class Validator(object):
             field = self.param
 
         c.errors.add(error, msg_params = msg_params, field = field)
+
+    def param_docs(self):
+        param_info = {}
+        for param in filter(None, tup(self.param)):
+            param_info[param] = None
+        return param_info
 
     def __call__(self, url):
         a = []
@@ -136,6 +143,18 @@ def _make_validated_kw(fn, simple_vals, param_vals, env):
         kw[var] = validator(env)
     return kw
 
+def set_api_docs(fn, newfn, simple_vals, param_vals):
+    newfn.__name__ = fn.__name__
+    newfn.__doc__ = fn.__doc__
+    if hasattr(fn, '_api_doc'):
+        newfn._api_doc = fn._api_doc
+        param_info = {}
+        for validator in chain(simple_vals, param_vals.itervalues()):
+            param_info.update(validator.param_docs())
+        newfn._api_doc['parameters'] = param_info
+    return newfn
+
+
 def validate(*simple_vals, **param_vals):
     def val(fn):
         def newfn(self, *a, **env):
@@ -147,10 +166,7 @@ def validate(*simple_vals, **param_vals):
             except VerifiedUserRequiredException:
                 return self.intermediate_redirect('/verify')
 
-        newfn.__name__ = fn.__name__
-        newfn.__doc__ = fn.__doc__
-        if hasattr(fn, '_api_doc'):
-            newfn._api_doc = fn._api_doc
+        set_api_docs(fn, newfn, simple_vals, param_vals)
         return newfn
     return val
 
@@ -196,10 +212,7 @@ def api_validate(response_type=None):
                         responder.send_failure(errors.VERIFIED_USER_REQUIRED)
                         return self.api_wrapper(responder.make_response())
 
-                newfn.__name__ = fn.__name__
-                newfn.__doc__ = fn.__doc__
-                if hasattr(fn, '_api_doc'):
-                    newfn._api_doc = fn._api_doc
+                set_api_docs(fn, newfn, simple_vals, param_vals)
                 return newfn
             return val
         return _api_validate
@@ -597,6 +610,11 @@ class VByName(Validator):
 
         return self.set_error(self._error)
 
+    def param_docs(self):
+        return {
+            self.param: _('the id of an existing thing')
+        }
+
 class VByNameIfAuthor(VByName):
     def run(self, fullname):
         thing = VByName.run(self, fullname)
@@ -632,6 +650,11 @@ class VModhash(Validator):
 
     def run(self, uh):
         pass
+
+    def param_docs(self):
+        return {
+            self.param: _('a modhash')
+        }
 
 class VVotehash(Validator):
     def run(self, vh, thing_name):
@@ -812,6 +835,11 @@ class VSubmitParent(VByName):
                     return parent
         #else
         abort(403, "forbidden")
+
+    def param_docs(self):
+        return {
+            self.param[0]: _('id of parent thing')
+        }
 
 class VSubmitSR(Validator):
     def __init__(self, srname_param, linktype_param=None, promotion=False):
@@ -994,6 +1022,16 @@ class VUrl(VRequired):
                 return url
         return self.error(errors.BAD_URL)
 
+    def param_docs(self):
+        params = {}
+        try:
+            params[self.param[0]] = _('a valid URL')
+            params[self.param[1]] = _('a subreddit')
+            params[self.param[2]] = _('boolean value')
+        except IndexError:
+            pass
+        return params
+
 class VOptionalExistingUname(VRequired):
     def __init__(self, item, allow_deleted=False, prefer_existing=False,
                  *a, **kw):
@@ -1033,6 +1071,11 @@ class VExistingUname(VOptionalExistingUname):
         if not user:
             self.error()
         return user
+
+    def param_docs(self):
+        return {
+            self.param: _('the name of an existing user')
+        }
 
 class VExistingUnameNotSelf(VExistingUname):
     def run(self, name):
@@ -1083,6 +1126,11 @@ class VBoolean(Validator):
         if lv == 'off' or lv == '' or lv[0] in ("f", "n"):
             return False
         return bool(val)
+
+    def param_docs(self):
+        return {
+            self.param: _('boolean value')
+        }
 
 class VNumber(Validator):
     def __init__(self, param, min=None, max=None, coerce = True,
@@ -1357,6 +1405,11 @@ class VOneOf(Validator):
             return self.default
         else:
             return val
+
+    def param_docs(self):
+        return {
+            self.param: _('one of (%s)') % ', '.join(self.options)
+        }
 
 class VImageType(Validator):
     def run(self, img_type):
