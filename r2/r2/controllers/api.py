@@ -77,11 +77,9 @@ def reject_vote(thing):
               (voteword, c.user.name, request.ip, thing.__class__.__name__,
                thing._id36, request.referer), "info")
 
-def api_doc(section=None):
+def api_doc(**kwargs):
     def add_metadata(api_function):
-        api_function._api_doc = {
-            "section": section
-        }
+        api_function._api_doc = kwargs.copy()
         return api_function
     return add_metadata
 
