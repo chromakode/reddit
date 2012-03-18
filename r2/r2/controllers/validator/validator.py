@@ -152,6 +152,7 @@ def set_api_docs(fn, newfn, simple_vals, param_vals):
         for validator in chain(simple_vals, param_vals.itervalues()):
             param_info.update(validator.param_docs())
         newfn._api_doc['parameters'] = param_info
+        newfn._api_doc['lineno'] = fn.func_code.co_firstlineno
     return newfn
 
 

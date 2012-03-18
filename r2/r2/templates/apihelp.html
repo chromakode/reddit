@@ -53,6 +53,9 @@
         %for method in sorted(api[section][uri]):
           <div class="endpoint" id="${api_method_id(uri, method)}">
             <% docs = api[section][uri][method] %>
+            %if docs.get('lineno'):
+              <a class="source" href="${thing.api_source_url}#L${docs['lineno']}">view code</a>
+            %endif
             <h3><span class="method">${method}</span>&nbsp;${uri}</h3>
             <div class="info">
               ${unsafe(safemarkdown(docs.get('doc')))}
