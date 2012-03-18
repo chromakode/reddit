@@ -9,43 +9,49 @@
   scopes = thing.oauth2_scopes
 %>
 
+<div class="header">
+  <div class="logo">
+    <h1><span class="name">reddit["<span class="title">api</span>"]</span></h1>
+  </div>
+  <div class="section introduction">
+    <p>This is automatically-generated documentation for the reddit API. It's gathered from docstrings and annotations in the code.</p>
+    <br/>
+    <p>The reddit API and code are&#32;<a href="/code">open source</a>. Found a mistake or interested in helping us improve? Have a gander at&#32;<a href="${thing.api_source_url}">api.py</a>&#32;and send us a pull request.</p>
+  </div>
+</div>
+
 <div class="toc">
-<ul>
-  <li>
-    <strong>API methods</strong>
-    <ul>
-    %for section in sorted(api):
-      <li>
-        <strong>${section}</strong>
-        <ul>
-          %for uri in sorted(api[section]):
-            <% methods = sorted(api[section][uri].keys()) %>
-            <li>
-              <a href="#${api_method_id(uri, methods[0])}">${uri}</a>
-                &nbsp; <span class="gray">(${', '.join(methods)})</span>
-            </li>
-          %endfor
-        </ul>
-      </li>
-    %endfor
-    </ul>
-  <li>
-    <strong>OAuth2 scopes</strong>
-    <ul>
-      %for scope in sorted(scopes):
-        <li><a href="#oauth2_scope_${scope}">${scope}</a></li>
+  <ul>
+    <li>
+      <strong>API methods</strong>
+      <ul>
+      %for section in sorted(api):
+        <li>
+          <strong>${section}</strong>
+          <ul>
+            %for uri in sorted(api[section]):
+              <% methods = sorted(api[section][uri].keys()) %>
+              <li>
+                <a href="#${api_method_id(uri, methods[0])}">${uri}</a>
+                  &nbsp; <span class="gray">(${', '.join(methods)})</span>
+              </li>
+            %endfor
+          </ul>
+        </li>
       %endfor
-    </ul>
-  </li>
-</ul>
+      </ul>
+    <li>
+      <strong>OAuth2 scopes</strong>
+      <ul>
+        %for scope in sorted(scopes):
+          <li><a href="#oauth2_scope_${scope}">${scope}</a></li>
+        %endfor
+      </ul>
+    </li>
+  </ul>
 </div>
 
 <div class="contents">
-  <div class="section introduction">
-    <p>This is the automatically-generated documentation for the Reddit API.</p>
-    <p>It's gathered from the docstrings in the code.</p>
-  </div>
-
   <div class="section methods">
     %for section in sorted(api):
       <h2>${section}</h2>
@@ -61,14 +67,14 @@
               ${unsafe(safemarkdown(docs.get('doc')))}
               <% params = docs.get('parameters') %>
               %if params:
-                <ul class="parameters">
+                <table class="parameters">
                 %for param in sorted(params):
-                  <li>
-                    <span class="name">${param}</span>
-                    <span class="desc">${params[param]}</span>
-                  </li>
+                  <tr>
+                    <td class="name">${param}</td>
+                    <td class="desc">${params[param]}</td>
+                  </tr>
                 %endfor
-                </ul>
+                </table>
               %endif
             </div>
           </div>
@@ -78,7 +84,7 @@
   </div>
 
   <div class="section scopes">
-    <h1>OAuth2 scopes</h1>
+    <h2>OAuth2 scopes</h2>
 
     %for scope in sorted(scopes.keys()):
       <div class="oauth2-scope">
