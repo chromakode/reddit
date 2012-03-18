@@ -2,7 +2,7 @@
     from r2.lib.filters import safemarkdown
 %>
 
-<%def name="api_method_id(uri)">api_method_${uri.split('/')[-1]}</%def>
+<%def name="api_method_id(uri, method)">${method}_${uri.split('/')[-1]}</%def>
 
 <%
   api = thing.api_docs
@@ -19,9 +19,10 @@
         <strong>${section}</strong>
         <ul>
           %for uri in sorted(api[section]):
+            <% methods = sorted(api[section][uri].keys()) %>
             <li>
-              <a href="#${api_method_id(uri)}">${uri}</a>
-                &nbsp; <span class="gray">(${', '.join(sorted(api[section][uri].keys()))})</span>
+              <a href="#${api_method_id(uri, methods[0])}">${uri}</a>
+                &nbsp; <span class="gray">(${', '.join(methods)})</span>
             </li>
           %endfor
         </ul>
@@ -46,20 +47,29 @@
   </div>
 
   <div class="section methods">
-    <h1>API methods</h1>
-
     %for section in sorted(api):
       <h2>${section}</h2>
       %for uri in sorted(api[section]):
-        <div class="endpoint" id="${api_method_id(uri)}">
-          <h3>${uri}</h3>
-          %for method in sorted(api[section][uri]):
-            <div class="method">
-              <h4>${method}</h4>
-              ${unsafe(safemarkdown(api[section][uri][method].get('doc')))}
+        %for method in sorted(api[section][uri]):
+          <div class="endpoint" id="${api_method_id(uri, method)}">
+            <% docs = api[section][uri][method] %>
+            <h3><span class="method">${method}</span>&nbsp;${uri}</h3>
+            <div class="info">
+              ${unsafe(safemarkdown(docs.get('doc')))}
+              <% params = docs.get('parameters') %>
+              %if params:
+                <ul class="parameters">
+                %for param in sorted(params):
+                  <li>
+                    <span class="name">${param}</span>
+                    <span class="desc">${params[param]}</span>
+                  </li>
+                %endfor
+                </ul>
+              %endif
             </div>
-          %endfor
-        </div>
+          </div>
+        %endfor
       %endfor
     %endfor
   </div>

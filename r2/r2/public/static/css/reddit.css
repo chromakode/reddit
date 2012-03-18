@@ -5142,29 +5142,31 @@ tr.gold-accent + tr > td {
 }
 
 .api-help {
-    font-size: 1.15em;
     margin: 0;
-    position: relative;
+    font-size: 1.25em;
 }
 
 .api-help .toc {
-    float: right;
+    float: left;
     margin-left: 0;
     background: #eff7ff;
-    border: 2px solid #cee3f8;
-    border-right: none;
-    padding: 15px 40px 0 20px;
+    border: 1px solid #cee3f8;
+    border-left: none;
+    padding: 15px 2em 0 2em;
+    width: 18em;
 }
 
 .api-help h1 {
-    font-size: 1.60em;
     margin-top: 0;
+    font-size: 1.50em;
+    font-weight: bold;
 }
 
 .api-help .contents {
     padding: 0 20px;
-    margin-left: 15px;
+    margin-left: 24em;
     margin-top: 20px;
+    max-width: 50em;
 }
 
 .api-help .contents .section {
@@ -5172,7 +5174,7 @@ tr.gold-accent + tr > td {
 }
 
 .api-help .toc strong {
-    font-size: 1.25em;
+    color: #333;
     font-weight: bold;
 }
 
@@ -5186,11 +5188,21 @@ tr.gold-accent + tr > td {
 }
 
 .api-help .endpoint, .api-help .oauth2-scope {
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 }
 
 .api-help .methods h2 {
     color: black;
+    font-size: 1.45em;
+    text-align: middle;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid #aaa;
+}
+
+.api-help .endpoint .info {
+    padding-left: 1em;
+    border-left: 1px solid #ddd;
 }
 
 .api-help .endpoint h3, .api-help .oauth2-scope h2 {
@@ -5198,13 +5210,26 @@ tr.gold-accent + tr > td {
     margin-bottom: .5em;
 }
 
-.api-help .method, .api-help .oauth2-scope p {
+.api-help .endpoint .method {
+    font-weight: normal;
+    color: gray;
 }
 
-.api-help .method h4 {
+.api-help .endpoint h4 {
     color: #555;
 }
 
-.api-help .method .md p {
-    margin-top: 0;
+.api-help .parameters {
+    background: #f0f0f0;
+    border-collapse: separate;
+    border-radius: 3px;
+    padding: 5px 10px;
+    max-width: 45em;
+}
+
+.api-help .parameters .name {
+    display: inline-block;
+    padding-right: 2em;
+    font-family: 'Courier New', monospace;
+    width: 20em;
 }
