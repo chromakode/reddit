@@ -132,7 +132,7 @@ class ApiController(RedditController, OAuth2ResourceController):
 
 
     @json_validate()
-    @api_doc(section="account")
+    @api_doc(section="account", extension=".json")
     def GET_me(self, responder):
         if c.user_is_loggedin:
             return Wrapped(c.user).render()
@@ -2665,6 +2665,8 @@ class ApihelpController(RedditController):
                 # type (JSON, etc.) which could be included as well.
 
                 uri = '/'.join((url_prefix, action))
+                if docs.get('extension'):
+                    uri += docs['extension']
                 api_docs[docs['section']][uri][method] = docs
 
         return api_docs
