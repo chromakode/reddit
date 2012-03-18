@@ -5143,62 +5143,65 @@ tr.gold-accent + tr > td {
 
 .api-help {
     font-size: 1.15em;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 0;
+    position: relative;
 }
 
-.api-help .section {
-    padding: 10px 30px;
+.api-help .toc {
+    float: right;
+    margin-left: 0;
+    background: #eff7ff;
+    border: 2px solid #cee3f8;
+    border-right: none;
+    padding: 15px 40px 0 20px;
 }
 
 .api-help h1 {
     font-size: 1.60em;
+    margin-top: 0;
 }
 
 .api-help .contents {
-    background: #eff7ff;
-    border: 2px solid #cee3f8;
-    border-left: none;
-    border-right: none;
+    padding: 0 20px;
+    margin-left: 15px;
+    margin-top: 20px;
 }
 
-.api-help .contents h1 {
-    margin-top: .5em;
+.api-help .contents .section {
+    margin-bottom: 2em;
 }
 
-.api-help .contents strong {
+.api-help .toc strong {
     font-size: 1.25em;
     font-weight: bold;
 }
 
-.api-help .contents a:hover {
+.api-help .toc a:hover {
     text-decoration: underline;
 }
 
-.api-help .contents > ul > li {
-    margin-bottom: 1em;
-}
-
-.api-help .contents li li {
-    display: inline-block;
-    width: 20em;
+.api-help .toc ul {
+    margin-top: .5em;
+    margin-bottom: 1.5em;
 }
 
 .api-help .endpoint, .api-help .oauth2-scope {
     margin-bottom: 1em;
 }
 
-.api-help .endpoint h2, .api-help .oauth2-scope h2 {
+.api-help .methods h2 {
+    color: black;
+}
+
+.api-help .endpoint h3, .api-help .oauth2-scope h2 {
+    color: #369;
     margin-bottom: .5em;
 }
 
 .api-help .method, .api-help .oauth2-scope p {
-    border-left: 2px solid #ccc;
-    padding-left: 1em;
-    margin-bottom: 1em;
 }
 
-.api-help .method h3 {
+.api-help .method h4 {
     color: #555;
 }
 

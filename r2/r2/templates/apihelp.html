@@ -2,29 +2,36 @@
     from r2.lib.filters import safemarkdown
 %>
 
-<div class="section introduction">
-<p>This is the automatically-generated documentation for the Reddit API.</p>
-<p>It's gathered from the docstrings in the code.</p>
-</div>
+<%def name="api_method_id(uri)">api_method_${uri.split('/')[-1]}</%def>
 
-<div class="section contents">
-<h1>Contents</h1>
+<%
+  api = thing.api_docs
+  scopes = thing.oauth2_scopes
+%>
 
+<div class="toc">
 <ul>
   <li>
     <strong>API methods</strong>
     <ul>
-      %for uri in sorted(thing.api_methods.keys()):
-        <li>
-            <a href="#api_method_${uri.split('/')[-1]}">${uri}</a>
-            &nbsp; <span class="gray">(${', '.join(sorted(thing.api_methods[uri].keys()))})</span>
-        </li>
-      %endfor
+    %for section in sorted(api):
+      <li>
+        <strong>${section}</strong>
+        <ul>
+          %for uri in sorted(api[section]):
+            <li>
+              <a href="#${api_method_id(uri)}">${uri}</a>
+                &nbsp; <span class="gray">(${', '.join(sorted(api[section][uri].keys()))})</span>
+            </li>
+          %endfor
+        </ul>
+      </li>
+    %endfor
     </ul>
   <li>
-    <strong>OAuth scopes</strong>
+    <strong>OAuth2 scopes</strong>
     <ul>
-      %for scope in sorted(thing.oauth2_scopes.keys()):
+      %for scope in sorted(scopes):
         <li><a href="#oauth2_scope_${scope}">${scope}</a></li>
       %endfor
     </ul>
@@ -32,30 +39,39 @@
 </ul>
 </div>
 
-<div class="section methods">
-<h1>API methods</h1>
+<div class="contents">
+  <div class="section introduction">
+    <p>This is the automatically-generated documentation for the Reddit API.</p>
+    <p>It's gathered from the docstrings in the code.</p>
+  </div>
 
-%for uri in sorted(thing.api_methods.keys()):
-  <div class="endpoint">
-    <a name="api_method_${uri.split('/')[-1]}"></a>
-    <h2>${uri}</h2>
-    %for method in sorted(thing.api_methods[uri].keys()):
-      <div class="method">
-        <h3>${method}</h3>
-        ${unsafe(safemarkdown(thing.api_methods[uri][method]))}
+  <div class="section methods">
+    <h1>API methods</h1>
+
+    %for section in sorted(api):
+      <h2>${section}</h2>
+      %for uri in sorted(api[section]):
+        <div class="endpoint" id="${api_method_id(uri)}">
+          <h3>${uri}</h3>
+          %for method in sorted(api[section][uri]):
+            <div class="method">
+              <h4>${method}</h4>
+              ${unsafe(safemarkdown(api[section][uri][method].get('doc')))}
+            </div>
+          %endfor
+        </div>
+      %endfor
+    %endfor
+  </div>
+
+  <div class="section scopes">
+    <h1>OAuth2 scopes</h1>
+
+    %for scope in sorted(scopes.keys()):
+      <div class="oauth2-scope">
+        <h2>${scope} (${scopes[scope]['name']})</h2>
+        <p class="oauth2-scope-description">${scopes[scope]['description']}</p>
       </div>
     %endfor
   </div>
-%endfor
-</div>
-
-<div class="section scopes">
-<h1>OAuth2 scopes</h1>
-
-%for scope in sorted(thing.oauth2_scopes.keys()):
-  <div class="oauth2-scope">
-    <h2>${scope} (${thing.oauth2_scopes[scope]['name']})</h2>
-    <p class="oauth2-scope-description">${thing.oauth2_scopes[scope]['description']}</p>
-  </div>
-%endfor
 </div>

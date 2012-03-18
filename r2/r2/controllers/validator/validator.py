@@ -149,6 +149,8 @@ def validate(*simple_vals, **param_vals):
 
         newfn.__name__ = fn.__name__
         newfn.__doc__ = fn.__doc__
+        if hasattr(fn, '_api_doc'):
+            newfn._api_doc = fn._api_doc
         return newfn
     return val
 
@@ -196,6 +198,8 @@ def api_validate(response_type=None):
 
                 newfn.__name__ = fn.__name__
                 newfn.__doc__ = fn.__doc__
+                if hasattr(fn, '_api_doc'):
+                    newfn._api_doc = fn._api_doc
                 return newfn
             return val
         return _api_validate

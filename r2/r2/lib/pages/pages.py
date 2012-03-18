@@ -3800,7 +3800,7 @@ class UserIPHistory(Templated):
         super(UserIPHistory, self).__init__()
 
 class ApiHelp(Templated):
-    def __init__(self, api_methods, oauth2_scopes, *a, **kw):
-        self.api_methods = api_methods
+    def __init__(self, api_docs, oauth2_scopes, *a, **kw):
+        self.api_docs = api_docs
         self.oauth2_scopes = oauth2_scopes
         super(ApiHelp, self).__init__(*a, **kw)
