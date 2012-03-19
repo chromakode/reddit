@@ -5141,35 +5141,12 @@ tr.gold-accent + tr > td {
     display: inline-block;
 }
 
-.api-help {
+.content.api-help {
     margin: 0;
     font-size: 1.25em;
 }
 
-.api-help .toc {
-    float: left;
-    margin-left: 0;
-    margin-top: 25px;
-    background: #eff7ff;
-    border: 1px solid #cee3f8;
-    border-left: none;
-    padding: 15px 30px 0 30px;
-    width: 18em;
-}
-
-.api-help h1 {
-    margin-top: 0;
-    padding-left: 30px;
-    font-size: 2.5em;
-    font-family: monospace;
-    float: left;
-}
-
-.api-help .title {
-    font-weight: bold;
-}
-
-.api-help .contents, .api-help .header .introduction {
+.api-help .contents {
     padding: 0 20px;
     margin-left: 24em;
     margin-top: 20px;
@@ -5180,18 +5157,87 @@ tr.gold-accent + tr > td {
     margin-bottom: 2em;
 }
 
+.api-help .sidebar {
+    float: left;
+    margin-left: 10px;
+}
+
+.api-help .sidebar .head {
+    position: relative;
+    background: url(../xray-snoo-head.png) top center no-repeat;
+    height: 188px;
+    margin-bottom: -78px;
+    z-index: 2;
+}
+
+.api-help .sidebar .feet {
+    position: relative;
+    background: url(../xray-snoo-feet.png) top center no-repeat;
+    height: 74px;
+    margin-top: -42px;
+    z-index: 2;
+}
+
+.api-help .toc {
+    background: #181818 url(../xray-snoo-body.png) center repeat-y;
+    border: 5px solid #959595;
+    border-radius: 8px;
+    padding: 15px 2em 0 2em;
+    width: 18em;
+}
+
+.api-help .contents .introduction {
+    position: relative;
+    border: 2px solid #ccc;
+    border-bottom-width: 3px;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: -1em;
+}
+
+.api-help .introduction:before,
+.api-help .introduction:after {
+    position: absolute;
+    display: block;
+    content: '';
+    border: 15px solid;
+}
+
+.api-help .introduction:before {
+    border-style: solid solid outset; /* mitigates firefox drawing a thicker arrow */
+    border-color: transparent #ccc transparent transparent;
+    left: -31px;
+    bottom: 20px;
+}
+
+.api-help .introduction:after {
+    border-color: transparent white transparent transparent;
+    left: -28px;
+    bottom: 20px;
+}
+
+.api-help .toc ul {
+    position: relative;
+    margin-top: .5em;
+    margin-bottom: 1.5em;
+    z-index: 10;
+}
+
+.api-help .toc > ul > li > strong {
+    color: #aaa;
+}
+
 .api-help .toc strong {
-    color: #333;
+    color: #888;
     font-weight: bold;
+}
+
+.api-help .toc a {
+    color: #8EB0D2;
 }
 
 .api-help .toc a:hover, .api-help .endpoint a:hover {
     text-decoration: underline;
-}
-
-.api-help .toc ul {
-    margin-top: .5em;
-    margin-bottom: 1.5em;
 }
 
 .api-help .endpoint, .api-help .oauth2-scope {
