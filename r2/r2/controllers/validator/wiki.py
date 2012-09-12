@@ -51,17 +51,17 @@ def wiki_validate(*simple_vals, **param_vals):
 def this_may_revise(page=None):
     if not c.user_is_loggedin:
         return False
-    
+
     if c.user_is_admin:
         return True
-    
+
     return may_revise(c.site, c.user, page)
 
 def this_may_view(page):
     user = c.user if c.user_is_loggedin else None
     return may_view(c.site, user, page)
 
-def may_revise(sr, user, page=None):    
+def may_revise(sr, user, page=None):
     if sr.is_moderator(user):
         # Mods may always contribute
         return True
@@ -69,7 +69,7 @@ def may_revise(sr, user, page=None):
         # If the user is not a mode and the mode is not anyone,
         # then the user may not edit.
         return False
-    
+
     if page and page.restricted and not page.special:
         # People may not contribute to restricted pages
         # (Except for special pages)
@@ -78,76 +78,76 @@ def may_revise(sr, user, page=None):
     if sr.is_wikibanned(user):
         # Users who are wiki banned in the subreddit may not contribute
         return False
-    
+
     if page and not may_view(sr, user, page):
         # Users who are not allowed to view the page may not contribute to the page
         return False
-    
+
     if not user.can_wiki():
         # Global wiki contributute ban
         return False
-    
+
     if page and page.has_editor(user.name):
         # If the user is an editor on the page, they may edit
         return True
-    
+
     if not sr.can_submit(user):
         # If the user can not submit to the subreddit
         # They should not be able to contribute
         return False
-    
+
     if page and page.special:
         # If this is a special page
         # (and the user is not a mod or page editor)
         # They should not be allowed to revise
         return False
-    
+
     if page and page.permlevel > 0:
         # If the page is beyond "anyone may contribute"
         # A normal user should not be allowed to revise
         return False
-    
+
     if sr.is_wikicontributor(user):
         # If the user is a wiki contributor, they may revise
         return True
-    
+
     karma = max(user.karma('link', sr), user.karma('comment', sr))
     if karma < sr.wiki_edit_karma:
         # If the user has too few karma, they should not contribute
         return False
-    
+
     age = (datetime.datetime.now(g.tz) - user._date).days
     if age < sr.wiki_edit_age:
         # If they user's account is too young
         # They should not contribute
         return False
-    
+
     # Otherwise, allow them to contribute
     return True
 
 def may_view(sr, user, page):
     # User being None means not logged in
     mod = sr.is_moderator(user) if user else False
-    
+
     if mod:
         # Mods may always view
         return True
-    
+
     if page.special:
         # Special pages may always be viewed
         # (Permission level ignored)
         return True
-    
+
     level = page.permlevel
-    
+
     if level < 2:
         # Everyone may view in levels below 2
         return True
-    
+
     if level == 2:
         # Only mods may view in level 2
         return mod
-    
+
     # In any other obscure level,
     # (This should not happen but just in case)
     # nobody may view.
@@ -156,13 +156,13 @@ def may_view(sr, user, page):
 def normalize_page(page):
     # Case insensitive page names
     page = page.lower()
-    
+
     # Normalize path
     page = normpath(page)
-    
+
     # Chop off initial "/", just in case it exists
     page = page.lstrip('/')
-    
+
     return page
 
 class AbortWikiError(Exception):
@@ -176,41 +176,41 @@ class VWikiPage(Validator):
         self.modonly = modonly
         self.required = required
         Validator.__init__(self, param, **kw)
-    
+
     def run(self, page):
         if not page:
             # If no page is specified, give the index page
             page = "index"
-        
+
         try:
             page = str(page)
         except UnicodeEncodeError:
             return self.set_error('INVALID_PAGE_NAME', code=400)
-        
+
         if ' ' in page:
             new_name = page.replace(' ', '_')
             url = '%s/%s' % (c.wiki_base_url, new_name)
             redirect_to(url)
-        
+
         if not page_match_regex.match(page):
             return self.set_error('INVALID_PAGE_NAME', code=400)
-        
+
         page = normalize_page(page)
-        
+
         c.page = page
         if (not c.is_wiki_mod) and self.modonly:
             return self.set_error('MOD_REQUIRED', code=403)
-        
+
         try:
             wp = self.validpage(page)
         except AbortWikiError:
             return
-        
+
         # TODO: MAKE NOT REQUIRED
         c.page_obj = wp
-        
+
         return wp
-    
+
     def validpage(self, page):
         try:
             wp = WikiPage.get(c.site, page)
@@ -227,7 +227,7 @@ class VWikiPage(Validator):
                 self.set_error('PAGE_NOT_FOUND', code=404)
                 raise AbortWikiError
             return None
-    
+
     def validversion(self, version, pageid=None):
         if not version:
             return
@@ -241,7 +241,7 @@ class VWikiPage(Validator):
             self.set_error('INVALID_REVISION', code=404)
             raise AbortWikiError
 
-class VWikiPageAndVersion(VWikiPage):    
+class VWikiPageAndVersion(VWikiPage):
     def run(self, page, *versions):
         wp = VWikiPage.run(self, page)
         if c.errors:
@@ -274,7 +274,7 @@ class VWikiPageRevise(VWikiPage):
 class VWikiPageCreate(VWikiPage):
     def __init__(self, param, **kw):
         VWikiPage.__init__(self, param, required=False, **kw)
-    
+
     def run(self, page):
         wp = VWikiPage.run(self, page)
         if c.errors:
@@ -291,4 +291,4 @@ class VWikiPageCreate(VWikiPage):
         elif len(page) > MAX_PAGE_NAME_LENGTH:
             c.error = {'reason': 'PAGE_NAME_LENGTH', 'max_length': MAX_PAGE_NAME_LENGTH}
         return this_may_revise()
-               
+

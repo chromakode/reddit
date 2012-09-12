@@ -63,10 +63,10 @@ class WikiBasePage(Templated):
 
 class WikiBase(Reddit):
     extra_page_classes = ['wiki-page']
-    
+
     def __init__(self, content, actionless=False, alert=None, **context):
         pageactions = []
-        
+
         if not actionless and c.page:
             pageactions += [(c.page, _("view"), False)]
             if this_may_revise(c.page_obj):
@@ -77,7 +77,7 @@ class WikiBase(Reddit):
                 pageactions += [('settings', _("settings"), True)]
 
         action = context.get('wikiaction', (c.page, 'wiki'))
-        
+
         context['title'] = c.site.name
         if alert:
             context['infotext'] = alert
